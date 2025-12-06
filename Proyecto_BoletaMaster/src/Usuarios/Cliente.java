@@ -192,14 +192,16 @@ public class Cliente extends Usuario{
         if (evento.getEstado() != "Activo" || evento.getFecha().isBefore(LocalDateTime.now()))
             throw new IllegalArgumentException("El evento no está disponible para compras.");
 
-        ArrayList<Tiquete> tiquetesPaquete = new ArrayList<>();
+        ArrayList<Tiquete> tiquetesPaquete = new ArrayList<Tiquete>();
         
         for(int i = 0;i<cantidad;i++) {
         	if((localidad.asientoDisponible(numerosAsientos.get(i)) && localidad.isNumerada())||(!localidad.isNumerada() && localidad.hayDisponibilidad())) {
                 Individual tiquete = new Individual(codigo, localidad.getPrecioBase(), evento, localidad, this, true, numerosAsientos.get(i));
         		tiquetesPaquete.add(tiquete);
         	}
-        	else throw new IllegalArgumentException("Numeros de asiento no disponibles");
+        	else {
+        		throw new IllegalArgumentException("Numeros de asiento no disponibles");
+        	}
         }
         
         Multiple paquete = new Multiple(codigo, this, localidad.getPrecioBasePaquetesxUnidad()*cantidad, tiquetesPaquete);
@@ -238,14 +240,16 @@ public class Cliente extends Usuario{
             precioTotal = l.getPrecioPaseTemporadaxUnidad();
     	}
     	
-        ArrayList<Tiquete> tiquetesPaquete = new ArrayList<>();
+        ArrayList<Tiquete> tiquetesPaquete = new ArrayList<Tiquete>();
         
         for(int i = 0;i<eventos.size();i++) {
         	if((localidades.get(i).asientoDisponible(numerosAsientos.get(i)) && localidades.get(i).isNumerada())||(!localidades.get(i).isNumerada() && localidades.get(i).hayDisponibilidad())) {
                 Individual tiquete = new Individual(codigo, localidades.get(i).getPrecioBase(), eventos.get(i), localidades.get(i), this, true, numerosAsientos.get(i));
         		tiquetesPaquete.add(tiquete);
         	}
-        	else throw new IllegalArgumentException("Numeros de asiento no disponibles");
+        	else {
+        		throw new IllegalArgumentException("Numeros de asiento no disponibles");
+        	}
         }
 
         PaseTemporada paseTemporada = new PaseTemporada(codigo, this, precioTotal, eventos, tiquetesPaquete);
@@ -284,14 +288,16 @@ public class Cliente extends Usuario{
             precioTotal = l.getPrecioPaseDeluxexUnidad();
     	}
     	
-        ArrayList<Tiquete> tiquetesPaquete = new ArrayList<>();
+        ArrayList<Tiquete> tiquetesPaquete = new ArrayList<Tiquete>();
         
         for(int i = 0;i<eventos.size();i++) {
         	if((localidades.get(i).asientoDisponible(numerosAsientos.get(i)) && localidades.get(i).isNumerada())||(!localidades.get(i).isNumerada() && localidades.get(i).hayDisponibilidad())) {
                 Individual tiquete = new Individual(codigo, localidades.get(i).getPrecioBase(), eventos.get(i), localidades.get(i), this, true, numerosAsientos.get(i));
         		tiquetesPaquete.add(tiquete);
         	}
-        	else throw new IllegalArgumentException("Numeros de asiento no disponibles");
+        	else {
+        		throw new IllegalArgumentException("Numeros de asiento no disponibles");
+        	}
         }
 
         Deluxe deluxe = new Deluxe(codigo, this, precioTotal,beneficios,  tiquetesPaquete);
@@ -367,6 +373,9 @@ public class Cliente extends Usuario{
     	if(!tiquete.isTransferible()){
     		throw new IllegalArgumentException("El tiquete no es transferible");
     	}
+    	if (tiquete.isImpreso()) {
+    		throw new IllegalArgumentException("El tiquete ya fue impreso y no puede transferirse.");
+    	}
     	if(destino == null){
     		throw new IllegalArgumentException("Cliente destino no existe");
     	}
@@ -375,7 +384,9 @@ public class Cliente extends Usuario{
     		tiquete.setDueno(destino);
     		return true;
     	}
-    	else return false;
+    	else {
+    		return false;
+    	}
     	
     }
 
@@ -392,6 +403,14 @@ public class Cliente extends Usuario{
     	if(!paquete.isTransferible()){
     		throw new IllegalArgumentException("El paquete no es transferible");
     	}
+    	
+    	// No se permite transferir paquetes que contengan tiquetes impresos
+    	for (Tiquete t : paquete.getTiquetesIncluidos()) {
+    		if (t.isImpreso()) {
+    			throw new IllegalArgumentException("El paquete contiene tiquetes impresos que no pueden transferirse.");
+    		}
+    	}
+    	
     	if(destino == null){
     		throw new IllegalArgumentException("Cliente destino no existe");
     	}
@@ -400,7 +419,9 @@ public class Cliente extends Usuario{
     		paquete.setDueno(destino);
     		return true;
     	}
-    	else return false;
+    	else {
+    		return false;
+    	}
     }
 
     /**
@@ -423,15 +444,25 @@ public class Cliente extends Usuario{
         		throw new IllegalArgumentException("Cliente destino no existe");
         	}
         	
+        	// Validar que todos los tiquetes estén en el paquete y no estén impresos
+        	for (Tiquete t : tiquetes) {
+        		if (!paquete.getTiquetesIncluidos().contains(t)) {
+        			throw new IllegalArgumentException("El tiquete no está en el paquete");
+        		}
+        		if (t.isImpreso()) {
+        			throw new IllegalArgumentException("No se puede transferir un tiquete ya impreso.");
+        		}
+        	}
+        	
         	if(credencial) {
         		for (Tiquete t: tiquetes) {
-        			if(paquete.getTiquetesIncluidos().contains(t)) {
-        			t.setDueno(destino);}
-        			else throw new IllegalArgumentException("El tiquete no está en el paquete");
+        			t.setDueno(destino);
         		}
         		return true;
         	}
-        	else return false;
+        	else {
+        		return false;
+        	}
         }
 
     /**
@@ -464,14 +495,17 @@ public class Cliente extends Usuario{
      */
     public void crearPuja(int id, OfertaMP omp, double monto) {
 
-        if (omp == null)
+        if (omp == null) {
             throw new IllegalArgumentException("La oferta no puede ser nula.");
+        }
 
-        if (monto <= 0)
+        if (monto <= 0) {
             throw new IllegalArgumentException("El monto debe ser mayor a 0.");
+        }
 
-        if (monto > this.saldo)
+        if (monto > this.saldo) {
             throw new IllegalArgumentException("Saldo insuficiente.");
+        }
 
         if (!omp.getPujas().isEmpty() && monto <= omp.getPujas().getFirst().getMonto()) {
             throw new IllegalArgumentException("El monto debe superar la puja más reciente.");
@@ -541,6 +575,13 @@ public class Cliente extends Usuario{
     		throw new IllegalArgumentException();
     	}
     	
+    	// No se pueden publicar en el marketplace tiquetes ya impresos
+    	for (Tiquete t : boletas) {
+    		if (t.isImpreso()) {
+    			throw new IllegalArgumentException("No se pueden vender en el marketplace tiquetes ya impresos.");
+    		}
+    	}
+    	
     	ArrayList<Puja> pjs = new ArrayList<Puja>();
     	OfertaMP omp= new OfertaMP(idOferta, this, boletas,  precioBase, "Activa",
     			LocalDateTime.now(), fechaCierre, pjs);
@@ -591,3 +632,4 @@ public class Cliente extends Usuario{
     }
     
 }
+

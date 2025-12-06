@@ -1,13 +1,14 @@
 package Tiquetes;
 import Eventos.*;
 import Usuarios.*;
+
 /**
  * Clase abstracta que representa un tiquete en el sistema BoletaMaster.
  * Define la información y el comportamiento común a todos los tipos de tiquetes.
  */
 public abstract class Tiquete{
 	
-	// Atributos
+	
 	protected double precio;
 	protected double cargoServicio;
 	protected double cuotaImpresion;
@@ -18,6 +19,7 @@ public abstract class Tiquete{
 	protected Localidad localidad;
 	protected Cliente dueno;
 	protected boolean usado;
+	protected boolean impreso;  
 	
 	//Ctor
 	
@@ -46,6 +48,7 @@ public abstract class Tiquete{
 		this.reembolsado = false;
 		this.usado = false;
 		this.dueno = dueno;
+		this.impreso = false;  
 	}
 
 	// Getters y Setters
@@ -142,7 +145,7 @@ public abstract class Tiquete{
     /**
      * Marca el tiquete como transferible o no.
      *
-     * @param usado Valor booleano que indica si el tiquete es transferible.
+     * @param transferible Valor booleano que indica si el tiquete es transferible.
      * @post Actualiza el estado de transferencia del tiquete.
      */
     public void setTransferible(boolean transferible) {
@@ -166,6 +169,38 @@ public abstract class Tiquete{
      */
     public void setReembolsado(boolean reembolsado) {
         this.reembolsado = reembolsado;
+    }
+
+    /**
+     * Indica si el tiquete ya fue impreso al menos una vez.
+     *
+     * @return {@code true} si ya fue impreso; {@code false} en caso contrario.
+     */
+    public boolean isImpreso() {
+        return impreso;
+    }
+
+    /**
+     * Marca el tiquete como impreso. 
+     * Si ya estaba impreso, no permite volver a imprimirlo.
+     *
+     * @pre El tiquete no ha sido impreso previamente.
+     * @post El tiquete queda marcado como impreso.
+     * @throws IllegalStateException si el tiquete ya estaba impreso.
+     */
+    public void registrarImpresion() throws IllegalStateException {
+        if (impreso) {
+            throw new IllegalStateException("El tiquete ya fue impreso y no puede volver a imprimirse.");
+        }
+        this.impreso = true;
+    }
+
+    /**
+     * Permite actualizar directamente el estado de impresión.
+     * Se recomienda usar registrarImpresion() para aplicar la regla de negocio.
+     */
+    public void setImpreso(boolean impreso) {
+        this.impreso = impreso;
     }
 
     /**
