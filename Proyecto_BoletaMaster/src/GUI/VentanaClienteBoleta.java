@@ -12,12 +12,18 @@ import javax.swing.JPanel;
 
 import Usuarios.Cliente;
 
-
 public class VentanaClienteBoleta extends JFrame {
 
     private Cliente cliente;
     private PanelMisTiquetes panelMisTiquetes;
 
+    /**
+     * @pre cliente != null
+     * @pre la ventana se crea  en el hilo de Swing 
+     * @post Se crea una ventana con título "BoletaMaster - Tus Boletas", menú, encabezado y panel de tiquetes
+     * @post La ventana queda empaquetada (pack()), centrada en pantalla y en estado maximizado
+     * @param cliente cliente autenticado cuyos tiquetes se mostrarán en la ventana
+     */
     public VentanaClienteBoleta(Cliente cliente) {
         this.cliente = cliente;
         setTitle("BoletaMaster - Tus Boletas");
@@ -34,6 +40,13 @@ public class VentanaClienteBoleta extends JFrame {
         setExtendedState(JFrame.MAXIMIZED_BOTH);
     }
 
+    /**
+     * @pre true
+     * @post Se configura la barra de menú con:
+     * Menú "Archivo" con opción "Salir" que cierra la ventana
+     * Menú "Ver" con opción "Mis tiquetes" que llama mostrarMisTiquetes()
+     * @post La barra de menú queda asociada a la ventana vía setJMenuBar(...)
+     */
     private void construirMenu() {
         JMenuBar barra = new JMenuBar();
 
@@ -53,6 +66,12 @@ public class VentanaClienteBoleta extends JFrame {
         setJMenuBar(barra);
     }
 
+    /**
+     * @pre cliente != null
+     * @post Se crea un panel en la zona norte con el título de la aplicación y
+     * una etiqueta que muestra el nombre y login del cliente
+     * @post El panel se añade en BorderLayout.NORTH del content pane
+     */
     private void construirEncabezado() {
         JPanel panelNorte = new JPanel(new BorderLayout());
 
@@ -70,11 +89,22 @@ public class VentanaClienteBoleta extends JFrame {
         add(panelNorte, BorderLayout.NORTH);
     }
 
+    /**
+     * @pre cliente != null
+     * @post Se crea un PanelMisTiquetes asociado al cliente
+     * @post El panel se añade en BorderLayout.CENTER del content pane
+     */
     private void construirContenido() {
         panelMisTiquetes = new PanelMisTiquetes(cliente);
         add(panelMisTiquetes, BorderLayout.CENTER);
     }
 
+    /**
+     * @pre cliente != null
+     * @post Se limpia el contenido actual de la ventana
+     * @post Se reconstruye el encabezado y un nuevo PanelMisTiquetes con el cliente actual
+     * @post El layout se revalida y repinta para reflejar los cambios en pantalla
+     */
     private void mostrarMisTiquetes() {
         getContentPane().removeAll();
         construirEncabezado();

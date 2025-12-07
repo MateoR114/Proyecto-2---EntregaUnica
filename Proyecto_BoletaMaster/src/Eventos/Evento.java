@@ -56,87 +56,87 @@ public class Evento{
 		return admin;
 	}
 	
-	/** Obtiene el nombre del evento. */
+	
     public String getNombre() {
     	return nombre; 
     	}
     
-	/** Fija el nombre del evento. */
+	
     public void setNombre(String nombre) { this.nombre = nombre; }
 
-	/** Obtiene el id del evento. */
+	
     public int getId() {
     	return this.id; 
     	}
     
-	/** Fija el id del evento. */
+	
     public void setId(int id) { 
     	this.id = id; 
     	}
-	/** Obtiene el venue del evento. */
+	
     public Venue getVenue() { 
     	return venue; 
     	}
     
-	/** Fija el venue del evento. */
+	
     public void setVenue(Venue venue) {
     	this.venue = venue; 
     	}
 
-	/** Obtiene la fecha del evento. */
+	
     public LocalDateTime getFecha() { 
     	return fecha; 
     	}
     
-	/** Fija la fecha del evento. */
+	
     public void setFecha(LocalDateTime fecha) { 
     	this.fecha = fecha; 
     	}
     
-	/** Obtiene el organizador del evento. */
+	
     public Organizador getOrganizador() { 
     	return organizador; 
     	}
     
-	/** Fija el organizador del evento. */
+	
     public void setOrganizador(Organizador organizador) {
     	this.organizador = organizador;
     	}
 
-	/** Obtiene el tipo de evento. */
+	
     public String getTipoEvento() { 
     	return tipoEvento; 
     	}
     
-	/** Fija el tipo de evento. */
+	
     public void setTipoEvento(String tipoEvento) { 
     	this.tipoEvento = tipoEvento; 
     	}
 
-	/** Obtiene el estado del evento. */
+	
     public String getEstado() { 
     	return estado; 
     	}
     
-	/** Fija el estado del evento. */
+	
     public void setEstado(String estado) { this.estado = estado; }
     
-	/** Obtiene las localidades del evento. */
+	
     public List<Localidad> getLocalidades() { 
     	return localidades; 
     	}
     
-	/** Obtiene las ofertas del evento. */
+	
     public List<Oferta> getOfertas() { 
     	return ofertas; 
     	}
-	/** Obtiene las ofertas del evento. */
+	
     public double getCuotaEvento() { 
     	return cuotaEvento; 
     	}
     
     
-    // Métodos funcionales
+  
     
     /**
      * Cancela el evento por decisión del organizador.
@@ -149,7 +149,7 @@ public class Evento{
             throw new IllegalStateException("No se puede cancelar un evento en estado actual.");
         }
         this.estado = "cancelado";
-        // TODO: Disparar proceso de reembolso automático.
+        
     }
     
     /**
@@ -162,7 +162,7 @@ public class Evento{
             throw new IllegalStateException("No se puede cancelar un evento en estado actual.");
         }
         this.estado = "cancelado por administrador";
-        // TODO: Disparar notificaciones y reembolsos.
+        
     }
     
     /**
@@ -179,7 +179,7 @@ public class Evento{
         this.fecha = nuevaFecha;
     }
     
-    // Métodos de localidades
+   
 
 
     /**
@@ -211,8 +211,7 @@ public class Evento{
     }
     
 
-    // Métodos de ofertas
-
+   
     /**
      * Crea una oferta de descuento para el evento.
      * @param descripcion Descripción de la oferta.
@@ -244,7 +243,7 @@ public class Evento{
         return activas;
     }
 
-    // Métodos de cortesías
+    
 
     /**
      * Entrega una cortesía a un cliente.
@@ -260,8 +259,7 @@ public class Evento{
         // TODO: Generar tiquete gratuito (precio = 0).
     }
 
-    // Métodos de reporte
-
+    
     /**
      * Calcula el total de tiquetes vendidos en el evento.
      * @return Número de tiquetes vendidos.

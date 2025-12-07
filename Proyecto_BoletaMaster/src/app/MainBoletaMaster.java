@@ -26,9 +26,10 @@ public class MainBoletaMaster {
         admin.establecerCargoServicioPorTipo("Concierto", 0.12);
 
         Organizador orgRock = new Organizador("orgRock", "SeArmoElPogo", "Rock al Parque", 10, 0.0, "IDARTES");
-        Organizador orgVallenato = new Organizador("orgVallenato", "SeJodioElFinDeSemana", "Silvestre Producciones", 11, 0.0, "Silvestre Producciones");
+        Organizador orgVallenato = new Organizador("orgVallenato", "SeJodioElFinDeSemana", "Silvestre Producciones", 11, 0.0, "SilvestreYJuanchoDeLaEspriella");
         Organizador orgPop = new Organizador("orgPop", "MaicolJakzon", "Pop Global", 12, 0.0, "Pop Global");
         Organizador orgFolclor = new Organizador("orgFolclor", "LaVamoATumba", "Tradición Caribe", 13, 0.0, "Tradición Caribe");
+        Organizador orgFuerza = new Organizador("orgFuerza", "AquiAndaLaTropaWey", "QuienMeVendeUnaCantina", 14, 0.0, "Fuerza Regida Music");
 
         Venue parqueSimonBolivar = new Venue(100, "Parque Simón Bolívar", "Bogotá", 50000, "Aforo masivo al aire libre");
         parqueSimonBolivar.setAprobado(true);
@@ -47,12 +48,14 @@ public class MainBoletaMaster {
         LocalDateTime fechaShakira = LocalDateTime.now().plusDays(50);
         LocalDateTime fechaJBalvin = LocalDateTime.now().plusDays(60);
         LocalDateTime fechaGaiteros = LocalDateTime.now().plusDays(35);
+        LocalDateTime fechaFuerza = LocalDateTime.now().plusDays(45);
 
         Evento rockAlParque = new Evento("Rock al Parque", 1000, parqueSimonBolivar, fechaRockParque, orgRock, "Festival", admin);
         Evento silvestreDangond = new Evento("Silvestre Dangond - El ultimo Baile", 1001, estadioMetropolitano, fechaSilvestre, orgVallenato, "Concierto", admin);
         Evento shakiraShow = new Evento("Shakira - Tour Las Mujeres Ya No Lloran", 1002, movistarArena, fechaShakira, orgPop, "Concierto", admin);
         Evento jBalvinShow = new Evento("J Balvin - Colores Album", 1003, movistarArena, fechaJBalvin, orgPop, "Concierto", admin);
         Evento gaiterosShow = new Evento("Los Gaiteros de San Jacinto ", 1004, plazaToros, fechaGaiteros, orgFolclor, "Concierto", admin);
+        Evento fuerzaRegidaShow = new Evento("Fuerza Regida - Belikeada Tour", 1005, movistarArena, fechaFuerza, orgFuerza, "Concierto", admin);
 
         Localidad rockGeneral = rockAlParque.crearLocalidad("General", false, 30000, 80000.0, 70000.0, 60000.0, 120000.0);
         Localidad rockVip = rockAlParque.crearLocalidad("VIP", true, 5000, 180000.0, 160000.0, 140000.0, 250000.0);
@@ -68,6 +71,9 @@ public class MainBoletaMaster {
 
         Localidad gaiterosGeneral = gaiterosShow.crearLocalidad("General", false, 6000, 60000.0, 50000.0, 45000.0, 100000.0);
         Localidad gaiterosPreferencial = gaiterosShow.crearLocalidad("Preferencial", true, 2000, 110000.0, 100000.0, 90000.0, 160000.0);
+
+        Localidad fuerzaGeneral = fuerzaRegidaShow.crearLocalidad("General", false, 7000, 120000.0, 110000.0, 100000.0, 180000.0);
+        Localidad fuerzaVip = fuerzaRegidaShow.crearLocalidad("VIP", true, 3000, 260000.0, 240000.0, 230000.0, 350000.0);
 
         Cliente clientePrincipal = new Cliente("mateo", "201916012 ", "Mateo Reales", 500);
         clientePrincipal.setSaldo(2000000.0);
@@ -89,6 +95,9 @@ public class MainBoletaMaster {
 
         Tiquete tiqGaiterosPreferencial = clientePrincipal.precompraIndividualNumerada(5, gaiterosShow, gaiterosPreferencial, 5);
         tiquetesCompra.add(tiqGaiterosPreferencial);
+
+        Tiquete tiqFuerzaGeneral = clientePrincipal.precompraIndividualNoNumerada(6, fuerzaRegidaShow, fuerzaGeneral, false);
+        tiquetesCompra.add(tiqFuerzaGeneral);
 
         clientePrincipal.hacerCompra(tiquetesCompra, paquetesCompra, false);
 
