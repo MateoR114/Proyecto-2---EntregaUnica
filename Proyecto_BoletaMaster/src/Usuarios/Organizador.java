@@ -6,7 +6,7 @@ import java.time.*;
 /**
  * Representa a un organizador de eventos dentro del sistema BoletaMaster.
  * Puede crear eventos, definir sus localidades, registrar ofertas, 
- * y generar reportes financieros asociados a sus ventas.
+ * y generar reportes financieros asociados a sus ventas
  */
 public class Organizador extends Usuario{
 	// Atributos 
